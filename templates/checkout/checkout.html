@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout | Trendy Fashion Store{% endblock %}
+{% from "__formhelpers.html" import render_field %}
+
+{% block body %}
+<div class="row" xmlns="http://www.w3.org/1999/html">
+	<div class="col-lg-8">
+		<h3 class="bold">
+			<i class="glyphicon glyphicon-pencil"></i> Shipping Information
+		</h3>
+
+		<div class="panel panel-primary">
+            <form action="{{ url_for('checkout_app.checkout') }}" method="POST" role="form"> <!-- Begin of form -->
+
+             {{ form.hidden_tag() }}
+			<div class="panel-body">
+
+				<div class="row">
+					<div class="col-lg-12">
+						<h4 class="bold">Personal Information</h4>
+					</div>
+					<div class="col-lg-6">
+						<div class="form-group">
+
+							{{ render_field(form.title, **{"class": "form-control", "id": "title"}) }}
+						</div>
+						<div class="form-group">
+                             {{ render_field(form.first_name, **{"class": "form-control", "id": "first_name",
+                               "placeholder": "Your first name"}) }}
+						</div>
+						<div class="form-group">
+                             {{ render_field(form.surname, **{"class": "form-control", "id": "city", "placeholder": "Surname"}) }}
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="form-group">
+                             {{ render_field(form.phone_number, **{"class": "form-control", "type": "tel",
+                                                                   "pattern": "[0-9]{3}-[0-9]{4}-[0-9]{4}",
+                                                                   "id": "phone_number", "placeholder": "020-7687-1479"}) }}
+						</div>
+						<div class="form-group">
+                            {{ render_field(form.email, **{"class": "form-control", "id": "email", "placeholder": "Email.."}) }}
+
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+                    <div class="col-lg-6">
+                        {{ render_field(form.address, **{"class": "form-control", "id": "address", "placeholder": "your address"}) }}
+
+                        <div class="form-group">
+                            {{ render_field(form.city, **{"class": "form-control", "id": "city", "placeholder": "Your city"}) }}
+                        </div>
+                    </div>
+
+					<div class="col-lg-6">
+						<div class="form-group">
+                            {{ render_field(form.state, **{"class": "form-control", "id": "state"}) }}
+						</div>
+						<div class="form-group">
+							{{ render_field(form.country, **{"class": "form-control", "id": "countries"}) }}
+						</div>
+					</div>
+				</div>
+
+
+				<div class="row">
+					<div class="col-lg-12">
+						<h4 class="bold">Payment</h4>
+					</div>
+					<div class="col-lg-6">
+						<div class="form-group">
+							{{ render_field(form.payment_type, **{"class": "form-control", "id": "payment_type"}) }}
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="panel-footer">
+
+                {% if session.num_of_items and session.num_of_items > 0 %}
+				    <button type="submit" class="btn btn-primary btn-sm">
+					    Submit My Order
+				    </button>
+                {% else %}
+
+                    <button type="submit" class="btn btn-primary btn-sm" disabled>
+					    Submit My Order
+				    </button>
+                    <em>
+                        (No items in cart)
+                    </em>
+                {% endif %}
+			</div>
+
+		   </form> <!-- End of the form -->
+
+		</div>
+	</div>
+
+	<div class="col-lg-4">
+		<h3 class="bold">
+			<i class="glyphicon glyphicon-th-list"></i> Cart Details
+		</h3>
+
+		<div class="panel panel-primary">
+			<div class="panel-body">
+				Current Cart Value
+			</div>
+			<ul class="list-group">
+				<li class="list-group-item">
+					<p>
+                        {% if session.number_of_items %}
+						    {{ session.number_of_items }} <strong class="pull-right">&pound;{{ session.grand_total }}</strong>
+                        {% endif %}
+					</p>
+					<p>
+                        {% if session.cart and is_shipping_cost_free(session.grand_total) %}
+						    Free shipping cost because your order is over &pound;100
+                            <strong class="pull-right">&pound;{{ session.grand_total }}</strong>
+                        {% else %}
+                            Fifty pounds has been added to your order because your over is less than &pound;100
+                            {% if session and session.grand_total %}
+                                <p>Total <strong class="pull-right">&pound;{{ session.grand_total + 50 | round }}</strong></p>
+                            {% endif %}
+                        {% endif %}
+					</p>
+				</li>
+				<li class="list-group-item">
+                     {% if session.cart and is_shipping_cost_free(session.grand_total) %}
+                         <p>Free shipping<strong class="pull-right"></strong></p>
+					    <p>Total <strong class="pull-right">&pound;{{ session.grand_total  }}</strong></p>
+                     {% else %}
+                        {% if session and session.grand_total %}
+                         <p>Total order<strong class="pull-right">&pound;{{ session.grand_total + 50 | round }}</strong></p>
+                        {% endif %}
+                     {% endif %}
+
+				</li>
+			</ul>
+		</div>
+
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">Benefits</h3>
+			</div>
+			<div class="panel-body">
+				Some of the benefits of shopping with us include:
+			</div>
+			<ul class="list-group">
+				<li class="list-group-item">Buyer Protection</li>
+				<li class="list-group-item">Next Day Delivery</li>
+				<li class="list-group-item">Flexible Payment Options</li>
+				<li class="list-group-item">7day Money Back Guarantee</li>
+			</ul>
+		</div>
+	</div>
+</div>
+{% endblock %}

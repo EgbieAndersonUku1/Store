@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}Cart | Trendy Fashion Store{% endblock %}
+
+{% block body %}
+<div class="row">
+	<div class="col-lg-8">
+		<h3 class="bold">
+			<i class="glyphicon glyphicon-shopping-cart"></i> Your Shopping Cart
+		</h3>
+
+		<div class="panel panel-primary">
+			<div class="panel-body">
+
+                {% if not cart_items %}
+                    <p>
+                        <strong>No items in your cart</strong>
+                    </p>
+                {% endif %}
+                {% for cart_item in cart_items %}
+
+                    {% from "__formhelpers.html" import render_field %}
+                    <form action="{{ url_for('cart_app.update_cart', product_id=cart_item.id) }}" method="POST" role="form">
+
+                         {{ form.csrf_token() }}
+                    <div class="row">
+
+
+                        <div class="col-lg-3">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="thumbnail thumbnail-q">
+                                    <a href="{{ url_for('product_app.product', product_id=cart_item.id) }}">
+                                        <img src="{{ url_for('static', filename='imgs/' + cart_item['image']) }}" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <a href="{{ url_for('product_app.product', product_id=cart_item.id) }}">
+                                <h4 class="bold">{{ cart_item.name.title() }}</h4>
+                            </a>
+                            <p>&pound;{{ cart_item.price }}</p>
+                            <br />
+                            <p>
+                                <button type="button" class="btn btn-danger btn-xs">
+                                    <a href="{{ url_for('cart_app.remove_item_from_cart', product_id=cart_item.id) }}">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </a>
+                                </button>
+                            </p>
+
+                        </div>
+                        <div class="col-lg-2">
+                            <p>
+                                 {{ render_field(form.quantity, **{"class": "form-control", "id": "quantity_active",
+                                                                  "autocomplete": "off", "value": cart_item.quantity,
+                                                                  "step": "1", "min": "1", "max": cart_item["stock"], "type": "number"})
+                                                }}
+
+                            </p>
+                        </div>
+                        <div class="col-lg-2">
+                            <h4>Total</h4>
+                            <p>
+                                <strong>&pound;{{ cart_item['total']  }}</strong>
+                            </p>
+
+                        </div>
+
+                        <div class="col-lg-2">
+                            <h4>Update</h4>
+                            <p>
+                              <button type="submit" class="btn btn-danger btn-sm" >
+                                <i class="glyphicon glyphicon-shopping-cart"></i> Update Cart
+                            </button>
+                            </p>
+
+
+                        </div>
+
+
+                    </div>
+                  </form>
+
+
+                {% endfor %}
+
+
+
+			</div>
+		</div>
+	</div>
+
+	<div class="col-lg-4">
+		<h3 class="bold">
+			<i class="glyphicon glyphicon-th-list"></i> Cart Summary
+		</h3>
+
+		<div class="panel panel-primary">
+			<div class="panel-body">
+				Current Cart Value
+			</div>
+			<ul class="list-group">
+
+
+				<li class="list-group-item">
+					<p>
+						{{ session.num_of_items }} Items <strong class="pull-right">&pound;{{ grand_total }}</strong>
+					</p>
+
+                     {% if shipping_costs %}
+					    <p>
+						Free shipping on items because you spent over <em>&pound;100</em><strong class="pull-right"></strong>
+					    </p>
+                    {% else %}
+                        <p>
+						You do not qualify for free shipping. You must spend over &pound;100 to qualify
+                            <strong class="pull-right"></strong>
+					    </p>
+                    {% endif %}
+				</li>
+				<li class="list-group-item">
+
+                    {% if not shipping_costs %}
+                        <p>Grand Total <strong class="pull-right">&pound;{{ grand_total }}</strong></p>
+                    {% elif session.num_of_items == 0 %}
+                        <p>&pound;50 shipping fee will be added if you do not spend &pound;100 or more
+                            <strong class="pull-right"></strong></p>
+                         <p>Total <strong class="pull-right">&pound;0</strong></p>
+                    {% else %}
+                         <p>&pound;50 shipping fee added<strong class="pull-right"></strong></p>
+                         <p>Total <strong class="pull-right">&pound;{{ shipping_fee }}</strong></p>
+                    {% endif %}
+                </li>
+			</ul>
+			<div class="panel-footer">
+				<a href="{{ url_for('home_app.home') }}" class="btn btn-primary btn-sm">
+					Continue shopping <i class="glyphicon glyphicon-chevron-left"></i>
+				</a>
+                <a href="{{ url_for('checkout_app.checkout') }}" class="btn btn-primary btn-sm">
+					Checkout <i class="glyphicon glyphicon-chevron-right"></i>
+				</a>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

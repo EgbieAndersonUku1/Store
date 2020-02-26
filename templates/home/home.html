@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Egbie's Super Store{% endblock %}
+{% from "__macro_product_display.html" import display_product %}
+
+
+{% block body %}
+{% include "carosal_nav.html" %}
+<div class="container" style="margin-top: 40px !important;">
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<h4 class="text-center pageTitle">Available Products ({{ products.total }})</h4>
+			</div>
+            {% include "_flash_message.html" %}
+		</div>
+	</div>
+</div>
+
+    <!--The macro template which takes the product, route function and page number-->
+{{ display_product(products, 'home_app.home', page_number ) }}
+
+
+<div class="row pad">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-body text-center">
+				<p>At <strong><em>Egbie's Super Store</em></strong>, we offer 24 hours service.</p>
+				<p>We offer 7-day money back gurantee and we take buyer protection seriously.</p> 
+				<p>All our products are of the highest grade.</p>
+                <p>This is not a real store but rather a demo store for demonstration purposes</p>
+                <p>It does not accept credit cards. All pictures were taken from the Topshop and the NEXT website in order to
+                    demonstration the functionality of this web store</p>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+{% endblock %}

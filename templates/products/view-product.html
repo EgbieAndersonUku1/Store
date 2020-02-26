@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}View Product | Super Store{% endblock %}
+
+{% block body %}
+<div class="row">
+	<div class="col-lg-12">
+		<ol class="breadcrumb">
+			<li>
+				<a href="{{ url_for('home_app.home') }}">Home</a>
+			</li>
+			<li class="active">View Product</li>
+		</ol>
+	</div>
+</div>
+
+<div class="row pad">
+	<div class="col-lg-5">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div class="thumbnail">
+				<img src="{{ url_for('static', filename='imgs/' + product.image) }} ">
+			</div>
+		</div>
+	</div>
+
+	<div class="col-lg-7">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">Product Details</h3>
+			</div>
+			<div class="panel-body">
+				<h3>{{ product.name.title() }} &nbsp;
+					<small>{% if product.stock > 0 %}
+								In Stock ({{ product.stock }})
+							{% else %}
+								No more items in stock
+							{% endif %}
+					</small>
+				</h3>
+				<h4>&pound;{{ product.price }}</h4>
+				<hr />
+				{{ product.description }}
+				<hr />
+
+
+                <form action="{{ url_for('cart_app.add_to_cart', product_id=product.id) }}" method="POST" role="form">
+
+                    {{ form.csrf_token() }}
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="row">
+                                    <div class="col-lg-12">
+
+                                        {% from "__formhelpers.html" import render_field %}
+
+
+                                            {% if product.stock > 0 %}
+
+                                            {{ render_field(form.quantity, **{"class": "form-control", "id": "quantity_active",
+                                                             "value": 1, "autocomplete": "off",
+                                                              "step": "1", "min": "1", "max": product.stock, "type": "number"})
+                                            }}
+                                            {{ form.id(value=product.id) }}
+                                            {% else %}
+                                                {{ render_field(form.quantity, **{"class": "form-control", "id": "quantity_active",
+                                                             "value": 1, "autocomplete": "off", "step": "1", "min": "0",
+                                                             "type": "number"})
+                                                }}
+                                            {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+			</div>
+
+
+				<div class="panel-footer">
+                    {% if product.stock > 0 %}
+                        <button type="submit" class="btn btn-primary">
+                            <i class="glyphicon glyphicon-shopping-cart"></i> Add To Cart
+                        </button>
+						{% if session.admin %}
+					       <a href="{{ url_for('admin_app.delete_item', product_id=product.id, page_number=page_number) }} ">
+							  <button type="button" class="btn btn-danger">
+								<i class="glyphicon glyphicon-minus"></i> Delete item
+							</button>
+						   </a>
+
+					    {% endif %}
+                    {% else %}
+                        <button type="submit" class="btn btn-danger" disabled>
+                            <i class="glyphicon glyphicon-shopping-cart"></i> Add To Cart
+                        </button>
+                    {% endif %}
+				</div>
+
+		</div>
+    </form>
+		<div role="tabpanel">
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active">
+					<a href="#description" aria-controls="description" role="tab" data-toggle="tab">Product Description</a>
+				</li>
+				<li role="presentation">
+					<a href="#shipping" aria-controls="shipping" role="tab" data-toggle="tab">Shipping Details</a>
+				</li>
+			</ul>
+		
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active" id="description">
+					<h3>Product Description</h3>
+                    {{ product.description }}
+				</div>
+				<div role="tabpanel" class="tab-pane" id="shipping">
+					<h3>Shipping Details</h3>
+                    Free shipping if product is over &pound;25
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+{% endblock %}

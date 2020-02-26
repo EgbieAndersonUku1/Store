@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Trendy Fashion Store{% endblock %}
+
+{% block body %}
+<div class="row">
+	<div class="col-lg-12">
+		<div id="carousel-id" class="carousel slide" data-ride="carousel">
+			<ol class="carousel-indicators">
+				<li data-target="#carousel-id" data-slide-to="0" class=""></li>
+				<li data-target="#carousel-id" data-slide-to="1" class=""></li>
+			</ol>
+			<div class="carousel-inner">
+				<div class="item active" style="height: 300px;">
+					<img alt="First slide" src="{{ url_for('static', filename='imgs/1.jpg') }}" style="width: 100%;">
+					<div class="container">
+						<div class="carousel-caption">
+							<h1>Amazing Autumn Wears</h1>
+							<p>
+								Get the most trendy outfits to go with the season
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="item" style="height: 300px;">
+					<img alt="Second slide" src="{{ url_for('static', filename='imgs/2.jpg') }}" style="width: 100%;">
+					<div class="container">
+						<div class="carousel-caption">
+							<h1>Amazing Autumn Wears</h1>
+							<p>
+								Get the most trendy outfits to go with the season
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<a class="left carousel-control" href="#carousel-id" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+			<a class="right carousel-control" href="#carousel-id" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+		</div>
+
+		<div class="col-lg-8 col-lg-offset-2">
+			<br>
+			<div class="row">
+					<h2>Admin Login</h2>
+
+					{% if error %}
+						<div class="alert alert-danger" role="alert">
+							Incorrect username and password
+						</div>
+
+					{% endif %}
+				<div class="form-group">
+
+				{% from "__formhelpers.html" import render_field %}
+				<form method="POST" action="{{ url_for('admin_app.admin_login') }}" role="form">
+
+						{{ form.hidden_tag() }}
+						{{ render_field(form.username, **{'class': 'form-control', 'value': 'admin'}) }}
+						{{ render_field(form.password, **{'class': 'form-control'}) }}
+
+						<div class="panel-footer">
+							<button type="submit" class="btn btn-primary">
+								<i class="glyphicon glyphicon-plus-sign"></i> Login
+							</button>
+						</div>
+
+				</form>
+				</div>
+			</div>
+
+
+
+		</div>
+
+	</div>
+</div>
+</div>
+
+
+
+
+
+
+
+</div>
+
+
+
+{% endblock %}

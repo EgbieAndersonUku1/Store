@@ -1,0 +1,18 @@
+FLASK_APP ='app.py'
+FLASK_ENV ='development'
+
+#UPLOAD_DIR = "UPLOAD THE PATH TO YOUR DIRECTORY HERE\imgs"
+UPLOAD_DIR = "C:\\Users\\abbie\\opt\\women_store\\static\\imgs"
+
+SECRET_KEY = 'nXr2Z5lidpy-PeVFqy33zwKxEORmxlJMlkItGE-Uihkjoejosnq7Qs2vdWXaXcxfuKwfQ'
+
+MYSQL_DATABASE_PORT = 3306
+MYSQL_DATABASE_CHARSET = 'utf-8'
+
+
+SQLALCHEMY_DATABASE_URI = 'sqlite:///store.db'
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+DEBUG = False
+
+SQLALCHEMY_POOL_RECYCLE = 299
